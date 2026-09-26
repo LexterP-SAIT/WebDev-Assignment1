@@ -1,13 +1,15 @@
 // Assignment 1: Advanced JavaScript and Tailwind CSS 
 // Program Name: Unit Converter 
-// Names: Adrian Lexter Paule Eunice Mendez Rupinder Kaur
-//  Date: September 9, 2026
+// Names: Adrian Lexter Paule, 
+//        Eunice Mendez
+//        Rupinder Kaur
+//  Date: September 26, 2026
 
 // Description:
-// This Typescript file contains the conversion logic and user interaction for the Unit Conversion website.
-// It converts between pouds and kilograms, miles and kilometers and Celsius and Fahrenheit. The program accepts
-// either a single value or an array of values from the HTML forms./ The input is parsed and passed to a higher order conversion
-// function. The converted value/s then are displayed on the webpage.
+//  This Typescript file contains the conversion logic and user interaction for the Unit Conversion website.
+//  It converts between pouds and kilograms, miles and kilometers and Celsius and Fahrenheit. The program accepts
+//  either a single value or an array of values from the HTML forms./ The input is parsed and passed to a higher order conversion
+//  function. The converted value/s then are displayed on the webpage.
 
 
 // Inputs: The program receive user input of values or values through the HTML input fields. 
@@ -15,12 +17,10 @@
 // Processing: The input is parsed into either a number or an array of numbers. The createConverter higher-order function 
 // receives the unit and uses the appropriate conversion formula and returns an arrow function that performs the conversion
 
-//Output: The converted value/s is displayed in the Result section on the webpage 
-
-
-
+// Output: The converted value/s is displayed in the Result section on the webpage 
 
 export {};
+
 // Constants and conversion formulas. uses arrow functions to convert between different units
 const poundsToKilograms = (pounds: number): number => pounds / 2.20462;
 const kilogramsToPounds = (kilograms: number): number => kilograms * 2.20462;
@@ -29,16 +29,14 @@ const kilometersToMiles = (kilometers: number): number => kilometers / 1.609344;
 const celsiusToFahrenheit = (celsius: number): number => (celsius * 9) / 5 + 32;
 const fahrenheitToCelsius = (fahrenheit: number): number => ((fahrenheit - 32) * 5) / 9;
 
-
 //  Types define the units supported by the converter and the types of input that the conversion function can accept
 type Unit = 'lb' | 'kg' | 'mi' | 'km' | 'C' | 'F';
 type ConversionInput = number | number[];
 
-
 // Higher order conversion function where it receives the unit to conver to and selects  the correct convesion formula.
 // The returned function can either accept a single function or an array of values 
 const createConverter = (fromUnit: Unit, toUnit: Unit) => {
-   
+    
     // stores the conversion forumale that matches the selected unit
     let conversionFormula: (val: number) => number;
 
@@ -50,7 +48,7 @@ const createConverter = (fromUnit: Unit, toUnit: Unit) => {
     else if (fromUnit === 'C' && toUnit === 'F') conversionFormula = celsiusToFahrenheit;
     else if (fromUnit === 'F' && toUnit === 'C') conversionFormula = fahrenheitToCelsius;
 
-// return an arrow function 
+    // return an arrow function 
     return (input: ConversionInput): ConversionInput => {
 
         // if input is an array, converts every value in the array
@@ -62,7 +60,7 @@ const createConverter = (fromUnit: Unit, toUnit: Unit) => {
     };
 };
 
-// Parser for Array that checks if the user enterred a single value or comma separated list of values
+// Parser for Array that checks if the user entered a single value or comma separated list of values
 // If its a list of array, it is converted into an array of numbers, if just a single value it converts into one number
 const parseInput = (value: string): ConversionInput => {
     if (value.includes(',')) {
@@ -80,23 +78,29 @@ const convertKMtoMI = createConverter('km', 'mi');
 const convertCtoF = createConverter('C', 'F');
 const convertFtoC = createConverter('F', 'C');
 
-// Weightconversion, this connects to the lbs/kg HTML forms to their conversion functions.
+// Weight conversion, this connects to the lbs/kg HTML forms to their conversion functions.
 // when the user clicks convert, the input is parsed, converted and displayed in the results field
+
 // Pounds to KG
 const inputLBtoKG = document.getElementById("inputLBtoKG") as HTMLInputElement;
 const buttonLBtoKG = document.getElementById("buttonLBtoKG") as HTMLButtonElement;
 const outputLBtoKG = document.getElementById("outputLBtoKG") as HTMLElement;
-buttonLBtoKG?.addEventListener('click', () => {
-     // reads and parses the users input
+
+buttonLBtoKG?.addEventListener('click', (e: Event) => {
+    e.preventDefault(); // Prevents page reload on button click or enter key
+    // reads and parses the users input
     const result = convertLBtoKG(parseInput(inputLBtoKG.value));
     // displays either the converted value or list of arrays
     outputLBtoKG.textContent = Array.isArray(result) ? result.join(', ') : result.toString();
 });
+
 // kg to lbs
 const inputKGtoLB = document.getElementById("inputKGtoLB") as HTMLInputElement;
 const buttonKGtoLB = document.getElementById("buttonKGtoLB") as HTMLButtonElement;
 const outputKGtoLB = document.getElementById("outputKGtoLB") as HTMLElement;
-buttonKGtoLB?.addEventListener('click', () => {
+
+buttonKGtoLB?.addEventListener('click', (e: Event) => {
+    e.preventDefault(); // Prevents page reload on button click or enter key
     // reads and parses the users input
     const result = convertKGtoLB(parseInput(inputKGtoLB.value));
     // displays either the converted value or list of arrays
@@ -104,11 +108,14 @@ buttonKGtoLB?.addEventListener('click', () => {
 });
 
 // Distance, this connects the miles/kms HTML forms to their conversion function
+
 // Miles to Km
 const inputMItoKM = document.getElementById("inputMItoKM") as HTMLInputElement;
 const buttonMItoKM = document.getElementById("buttonMItoKM") as HTMLButtonElement;
 const outputMItoKM = document.getElementById("outputMItoKM") as HTMLElement;
-buttonMItoKM?.addEventListener('click', () => {
+
+buttonMItoKM?.addEventListener('click', (e: Event) => {
+    e.preventDefault(); // Prevents page reload on button click or enter key
     // reads and parses the users input
     const result = convertMItoKM(parseInput(inputMItoKM.value));
     // display the converted single value or list of arrays
@@ -119,8 +126,10 @@ buttonMItoKM?.addEventListener('click', () => {
 const inputKMtoMI = document.getElementById("inputKMtoMI") as HTMLInputElement;
 const buttonKMtoMI = document.getElementById("buttonKMtoMI") as HTMLButtonElement;
 const outputKMtoMI = document.getElementById("outputKMtoMI") as HTMLElement;
-buttonKMtoMI?.addEventListener('click', () => {
-     // reads and parses the users input
+
+buttonKMtoMI?.addEventListener('click', (e: Event) => {
+    e.preventDefault(); // Prevents page reload on button click or enter key
+    // reads and parses the users input
     const result = convertKMtoMI(parseInput(inputKMtoMI.value));
     // displays either the converted value or list of arrays
     outputKMtoMI.textContent = Array.isArray(result) ? result.join(', ') : result.toString();
@@ -132,10 +141,12 @@ buttonKMtoMI?.addEventListener('click', () => {
 const inputCtoF = document.getElementById("inputCtoF") as HTMLInputElement;
 const buttonCtoF = document.getElementById("buttonCtoF") as HTMLButtonElement;
 const outputCtoF = document.getElementById("outputCtoF") as HTMLElement;
-buttonCtoF?.addEventListener('click', () => {
-     // reads and parses the users input
+
+buttonCtoF?.addEventListener('click', (e: Event) => {
+    e.preventDefault(); // Prevents page reload on button click or enter key
+    // reads and parses the users input
     const result = convertCtoF(parseInput(inputCtoF.value));
-        // displays either the converted value or list of arrays
+    // displays either the converted value or list of arrays
     outputCtoF.textContent = Array.isArray(result) ? result.join(', ') : result.toString();
 });
 
@@ -143,14 +154,16 @@ buttonCtoF?.addEventListener('click', () => {
 const inputFtoC = document.getElementById("inputFtoC") as HTMLInputElement;
 const buttonFtoC = document.getElementById("buttonFtoC") as HTMLButtonElement;
 const outputFtoC = document.getElementById("outputFtoC") as HTMLElement;
-buttonFtoC?.addEventListener('click', () => {
-       // reads and parses the users input
+
+buttonFtoC?.addEventListener('click', (e: Event) => {
+    e.preventDefault(); // Prevents page reload on button click or enter key
+    // reads and parses the users input
     const result = convertFtoC(parseInput(inputFtoC.value));
-        // displays either the converted value or list of arrays
+    // displays either the converted value or list of arrays
     outputFtoC.textContent = Array.isArray(result) ? result.join(', ') : result.toString();
 });
 
-// Tab Switching Logic, when a tab is clicks, the other tab contents are hidden and selected tab is highlighted
+// Tab Switching Logic, when a tab is clicked, the other tab contents are hidden and selected tab is highlighted
 const tabs = ['weight', 'distance', 'temp'];
 
 tabs.forEach(tab => {
