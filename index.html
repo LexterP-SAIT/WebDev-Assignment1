@@ -1,376 +1,210 @@
+<!--Assignment 1: Advanced JavaScript and Tailwind CSS
+Program Name: Unit Converter
+Names: Adrian Lexter Paule
+       Eunice Mendez
+       Rupinder Kaur
+Date: September 9, 2026
+
+Description: A responsive static website built using HTML, Typescript and Tailwind CSS to convert between metric units 
+and imperial units between kilograms and pounds, kilometers and miles, Celsius and Fahrenheit and vice versa. Users can enter 
+either a single value or a comma separated array of values into the conversion forms. The Typescript reads the users input, 
+processes the values using the appropriate formula and displays the converted value/s as the output. 
+
+Input: User ienters a single value or comma separated values into the conversion form
+
+Processing: The javascript functions receive the unit to convert from and the unit to conver to, then returns it. 
+
+Output: The converted value/s is displaye din the Result section of the corresponding conersion form.
+-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Unit Converter</title>
-
-    <!-- Tailwind CSS Play CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
+<body class="bg-slate-100 min-h-screen flex flex-col font-sans">
 
-<body class="bg-slate-100 min-h-screen">
+    <!-- Navbar: site title and the three tab buttons: Weight, Distance and Temperature-->
+    <nav class="bg-green-900 text-white shadow-md">
+        <div
+            class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center h-auto sm:h-16 py-3 sm:py-0">
+            <span class="font-bold text-xl tracking-wide mb-2 sm:mb-0">Unit Converter</span>
 
-    <!-- ================= HEADER ================= -->
-
-    <header class="bg-white border-b border-slate-200">
-
-        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-
-            <h1 class="text-lg font-bold text-slate-900">
-                Unit Converter
-            </h1>
-
-            <span
-                class="text-xs font-semibold text-blue-700 bg-blue-100 px-3 py-1 rounded-full">
-
-                CPRG 306
-
-            </span>
-
+            <!-- Tab navigation. This allows users to switch between the different categories, weight,, temperature or distance -->
+            
+            <div class="flex space-x-1 md:space-x-2" id="tab-headers">
+                
+                <!-- Weight tab -->
+                <button id="tab-button-weight"
+                    class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold bg-green-600 text-white transition-all">Weight</button>
+                
+                <!-- Distance tab -->
+                    <button id="tab-button-distance"
+                    class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">Distance</button>
+               
+                <!-- Temperature tab -->
+                    <button id="tab-button-temp"
+                    class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">Temperature</button>
+            </div>
         </div>
-
-    </header>
-
-
-    <!-- ================= HERO SECTION ================= -->
-
-    <section class="max-w-5xl mx-auto px-6 pt-12 pb-8 text-center">
-
-        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900">
-            Convert anything, instantly
-        </h2>
-
-        <p class="text-base text-slate-600 mt-3 max-w-xl mx-auto">
-            Convert weight, distance and temperature quickly and easily.
-        </p>
-
-    </section>
-
-
-    <!-- ================= NAVIGATION TABS ================= -->
-
-    <nav class="max-w-5xl mx-auto px-6 mb-8">
-
-        <div class="flex flex-wrap justify-center gap-3">
-
-            <!-- Weight Tab -->
-
-            <button
-                id="weight-tab"
-                class="px-5 py-2 rounded-lg bg-blue-600 text-white font-semibold cursor-pointer">
-
-                Weight
-
-            </button>
-
-
-            <!-- Distance Tab -->
-
-            <button
-                id="distance-tab"
-                class="px-5 py-2 rounded-lg bg-white text-slate-700 font-semibold border border-slate-200 cursor-pointer">
-
-                Distance
-
-            </button>
-
-
-            <!-- Temperature Tab -->
-
-            <button
-                id="temperature-tab"
-                class="px-5 py-2 rounded-lg bg-white text-slate-700 font-semibold border border-slate-200 cursor-pointer">
-
-                Temperature
-
-            </button>
-
-        </div>
-
     </nav>
 
 
-    <!-- ================= MAIN CONTENT ================= -->
+    <!-- Main content. It contains the conversion forms. The responsive tailwind css classes alow the layout to adjust to different screens -->
+    <main class="flex-1 flex items-center justify-center p-4 sm:p-6">
 
-    <main class="max-w-2xl mx-auto px-6 pb-16">
+        <!-- main converter container -->
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-xl p-6 md:p-10">
 
+            <!-- input instructions -->
+            <p class="text-xs sm:text-sm text-slate-500 text-center mb-6">Enter a single value (e.g. <code
+                    class="bg-slate-100 px-1 py-0.5 rounded text-slate-700">50</code>) or a comma-separated array (e.g.
+                <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700">10, 20, 30</code>)</p>
 
-        <!-- ========================================= -->
-        <!-- WEIGHT CONVERTER -->
-        <!-- ========================================= -->
+            <!-- weight tab. this converts from pounds to kilograms and vice versa -->
+            <div id="tab-weight" class="tab-content space-y-6">
+                
+                <!-- Pounds to Kilograms, converts a single value or array of values into kg-->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200">
 
-        <section
-            id="weight-section"
-            class="bg-white rounded-2xl shadow-md p-6">
+                    <!-- Convertion label -->
+                    <label for="inputLBtoKG" class="block text-sm font-semibold text-slate-700 mb-2">Pounds (lb) to
+                        Kilograms (kg)</label>
+                    
+                    <!--Lbs to kilogram form  -->
+                    <form id="formLBtoKG" class="flex flex-col sm:flex-row gap-2">
+                        
+                        <!-- user input -->
+                        <input type="text" id="inputLBtoKG" name="inputLBtoKG" placeholder="e.g. 150 or 100, 150, 200"
+                            class="flex-1 rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        
+                        <!--   conversion button -->
+                        <button type="button" id="buttonLBtoKG"
+                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">Convert</button>
+                    </form>
+                    <!-- conversion output -->
+                    <div class="mt-3 text-sm text-slate-600">Result: <span id="outputLBtoKG"
+                            class="font-bold text-green-600">--</span></div>
+                </div>
 
-            <h3 class="text-xl font-bold text-slate-900">
-                Weight Converter
-            </h3>
-
-            <p class="text-sm text-slate-500 mt-1">
-                Convert between kilograms and pounds
-            </p>
-
-
-            <!-- Weight Input -->
-
-            <label
-                for="weight-input"
-                class="block text-sm font-medium text-slate-700 mt-5 mb-2">
-
-                Enter value or values
-
-            </label>
-
-            <input
-                id="weight-input"
-                type="text"
-                placeholder="Example: 10 or 10, 20, 30"
-                class="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-900 focus:border-blue-500 focus:outline-none"
-            >
-
-
-            <!-- Weight Conversion Direction -->
-
-            <label
-                for="weight-direction"
-                class="block text-sm font-medium text-slate-700 mt-4 mb-2">
-
-                Conversion
-
-            </label>
-
-            <select
-                id="weight-direction"
-                class="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-900 focus:border-blue-500 focus:outline-none">
-
-                <option value="kg-lb">
-                    Kilograms to Pounds
-                </option>
-
-                <option value="lb-kg">
-                    Pounds to Kilograms
-                </option>
-
-            </select>
-
-
-            <!-- Weight Convert Button -->
-
-            <button
-                id="weight-button"
-                class="w-full mt-4 rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 transition cursor-pointer">
-
-                Convert
-
-            </button>
-
-
-            <!-- Weight Result -->
-
-            <div class="mt-5 rounded-lg bg-slate-50 p-4 text-center">
-
-                <p class="text-xs uppercase tracking-wide text-slate-500">
-                    Result
-                </p>
-
-                <p
-                    id="weight-result"
-                    class="text-2xl font-bold text-blue-600 mt-1">
-
-                    0.00
-
-                </p>
-
+                <!-- Kilograms to Pounds: converts single kg to lbs -->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200">
+                    <!-- conversion label -->
+                    <label for="inputKGtoLB" class="block text-sm font-semibold text-slate-700 mb-2">Kilograms (kg) to
+                        Pounds (lb)</label>
+                    <!-- kg to lbs form -->
+                    <form id="formKGtoLB" class="flex flex-col sm:flex-row gap-2">
+                        <!-- user input -->
+                        <input type="text" id="inputKGtoLB" name="inputKGtoLB" placeholder="e.g. 70 or 50, 60, 70"
+                            class="flex-1 rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        
+                            <!--  conversion button -->
+                        <button type="button" id="buttonKGtoLB"
+                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">Convert</button>
+                    </form>
+                    <!-- vonersion output -->
+                    <div class="mt-3 text-sm text-slate-600">Result: <span id="outputKGtoLB"
+                            class="font-bold text-green-600">--</span></div>
+                </div>
             </div>
 
-        </section>
+            <!-- Distance tab: provides conversion between miles and kilometers and vice versa -->
+            <div id="tab-distance" class="tab-content hidden space-y-6">
+                <!-- Miles to Kilometers -->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200">
+                    
+                    <!-- conversion label -->
+                    <label for="inputMItoKM" class="block text-sm font-semibold text-slate-700 mb-2">Miles (mi) to
+                        Kilometers (km)</label>
+                    <!-- miles to km form -->
+                    <form id="formMItoKM" class="flex flex-col sm:flex-row gap-2">
+                        <!-- user input -->
+                        <input type="text" id="inputMItoKM" name="inputMItoKM" placeholder="e.g. 5 or 3.1, 6.2, 13.1"
+                            class="flex-1 rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        
+                            <!-- conversion button -->
+                        <button type="button" id="buttonMItoKM"
+                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">Convert</button>
+                    </form>
+                    <!-- conversion output -->
+                    <div class="mt-3 text-sm text-slate-600">Result: <span id="outputMItoKM"
+                            class="font-bold text-green-600">--</span></div>
+                </div>
 
-
-
-        <!-- ========================================= -->
-        <!-- DISTANCE CONVERTER -->
-        <!-- ========================================= -->
-
-        <section
-            id="distance-section"
-            class="bg-white rounded-2xl shadow-md p-6 hidden">
-
-            <h3 class="text-xl font-bold text-slate-900">
-                Distance Converter
-            </h3>
-
-            <p class="text-sm text-slate-500 mt-1">
-                Convert between kilometres and miles
-            </p>
-
-
-            <!-- Distance Input -->
-
-            <label
-                for="distance-input"
-                class="block text-sm font-medium text-slate-700 mt-5 mb-2">
-
-                Enter value or values
-
-            </label>
-
-            <input
-                id="distance-input"
-                type="text"
-                placeholder="Example: 10 or 10, 20, 30"
-                class="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-900 focus:border-emerald-500 focus:outline-none"
-            >
-
-
-            <!-- Distance Conversion Direction -->
-
-            <label
-                for="distance-direction"
-                class="block text-sm font-medium text-slate-700 mt-4 mb-2">
-
-                Conversion
-
-            </label>
-
-            <select
-                id="distance-direction"
-                class="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-900 focus:border-emerald-500 focus:outline-none">
-
-                <option value="km-miles">
-                    Kilometres to Miles
-                </option>
-
-                <option value="miles-km">
-                    Miles to Kilometres
-                </option>
-
-            </select>
-
-
-            <!-- Distance Convert Button -->
-
-            <button
-                id="distance-button"
-                class="w-full mt-4 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700 transition cursor-pointer">
-
-                Convert
-
-            </button>
-
-
-            <!-- Distance Result -->
-
-            <div class="mt-5 rounded-lg bg-slate-50 p-4 text-center">
-
-                <p class="text-xs uppercase tracking-wide text-slate-500">
-                    Result
-                </p>
-
-                <p
-                    id="distance-result"
-                    class="text-2xl font-bold text-emerald-600 mt-1">
-                    0.00
-                </p>
+                <!-- Kilometers to Miles -->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200">
+                    <!-- conversion label -->
+                    <label for="inputKMtoMI" class="block text-sm font-semibold text-slate-700 mb-2">Kilometers (km) to
+                        Miles (mi)</label>
+                    <!-- conversion form -->
+                    <form id="formKMtoMI" class="flex flex-col sm:flex-row gap-2">
+                        <!-- user input -->
+                        <input type="text" id="inputKMtoMI" name="inputKMtoMI" placeholder="e.g. 10 or 5, 10, 21"
+                            class="flex-1 rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        
+                            <!-- conversion button -->
+                        <button type="button" id="buttonKMtoMI"
+                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">Convert</button>
+                    </form>
+                    <!-- conversion reults -->
+                    <div class="mt-3 text-sm text-slate-600">Result: <span id="outputKMtoMI"
+                            class="font-bold text-green-600">--</span></div>
+                </div>
             </div>
-        </section>
-        <!-- TEMPERATURE CONVERTER -->
-        <section
-            id="temperature-section"
-            class="bg-white rounded-2xl shadow-md p-6 hidden">
 
-            <h3 class="text-xl font-bold text-slate-900">
-                Temperature Converter
-            </h3>
+            <!-- Temperature tab. This contains conversions from Celsius to Fahrenheit and vice versa -->
+            <div id="tab-temp" class="tab-content hidden space-y-6">
+                <!-- Celsius to Fahrenheit -->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200">
+                    <!-- conversion label -->
+                    <label for="inputCtoF" class="block text-sm font-semibold text-slate-700 mb-2">Celsius (°C) to
+                        Fahrenheit (°F)</label>
+                    
+                        <!-- conversion form -->
+                    <form id="formCtoF" class="flex flex-col sm:flex-row gap-2">
+                        <!-- user input -->
+                        <input type="text" id="inputCtoF" name="inputCtoF" placeholder="e.g. 0 or 0, 20, 100"
+                            class="flex-1 rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        
+                            <!-- conversion button -->
+                        <button type="button" id="buttonCtoF"
+                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">Convert</button>
+                    </form>
+                    <!-- conversion results -->
+                    <div class="mt-3 text-sm text-slate-600">Result: <span id="outputCtoF"
+                            class="font-bold text-green-600">--</span></div>
+                </div>
 
-            <p class="text-sm text-slate-500 mt-1">
-                Convert between Celsius and Fahrenheit
-            </p>
-
-
-            <!-- Temperature Input -->
-
-            <label
-                for="temperature-input"
-                class="block text-sm font-medium text-slate-700 mt-5 mb-2">
-
-                Enter value or values
-
-            </label>
-
-            <input
-                id="temperature-input"
-                type="text"
-                placeholder="Example: 20 or 20, 30, 40"
-                class="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-900 focus:border-violet-500 focus:outline-none"
-            >
-
-
-            <!-- Temperature Conversion Direction -->
-
-            <label
-                for="temperature-direction"
-                class="block text-sm font-medium text-slate-700 mt-4 mb-2">
-
-                Conversion
-
-            </label>
-
-            <select
-                id="temperature-direction"
-                class="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-900 focus:border-violet-500 focus:outline-none">
-
-                <option value="c-f">
-                    Celsius to Fahrenheit
-                </option>
-
-                <option value="f-c">
-                    Fahrenheit to Celsius
-                </option>
-
-            </select>
-
-
-            <!-- Temperature Convert Button -->
-
-            <button
-                id="temperature-button"
-                class="w-full mt-4 rounded-lg bg-violet-600 px-4 py-2 font-semibold text-white hover:bg-violet-700 transition cursor-pointer">
-
-                Convert
-
-            </button>
-
-
-            <!-- Temperature Result -->
-
-            <div class="mt-5 rounded-lg bg-slate-50 p-4 text-center">
-
-                <p class="text-xs uppercase tracking-wide text-slate-500">
-                    Result
-                </p>
-
-                <p
-                    id="temperature-result"
-                    class="text-2xl font-bold text-violet-600 mt-1">
-                    0.00
-                </p>
+                <!-- Fahrenheit to Celsius -->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200">
+                    <!-- conversion label -->
+                    <label for="inputFtoC" class="block text-sm font-semibold text-slate-700 mb-2">Fahrenheit (°F) to
+                        Celsius (°C)</label>
+                    <!-- conversion form -->
+                    <form id="formFtoC" class="flex flex-col sm:flex-row gap-2">
+                        <!-- user input -->
+                        <input type="text" id="inputFtoC" name="inputFtoC" placeholder="e.g. 32 or 32, 68, 212"
+                            class="flex-1 rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        
+                        <!-- conversion button -->
+                        <button type="button" id="buttonFtoC"
+                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">Convert</button>
+                    </form>
+                    <!-- conversion results -->
+                    <div class="mt-3 text-sm text-slate-600">Result: <span id="outputFtoC"
+                            class="font-bold text-green-600">--</span></div>
+                </div>
             </div>
-        </section>
-    </main>
-  
-    <footer 
-    class="bg-white border-t border-slate-200">
-        <div class="max-w-5xl mx-auto px-6 py-6 text-center">
-            <p class="text-sm text-slate-500">
-                Built with Tailwind CSS and JavaScript &middot; CPRG 306
-            </p>
         </div>
-    </footer>
-    <script src="script.js"></script>
+    </main>
+
+    <script type="module" src="main.js"></script>
 </body>
+
 </html>
